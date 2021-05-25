@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Twitter Clone</string>
+    <string name="logout">Logout</string>
+    <string name="tweet_comment">Tweet Comment</string>
+    <string name="tweet">Tweet</string>
+    <string name="what_s_in_your_mind">What\'s in your mind?</string>
+</resources>
