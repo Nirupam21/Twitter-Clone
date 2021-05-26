@@ -1,5 +1,6 @@
 package com.example.twitterclone
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -27,8 +28,7 @@ class CommentViewActivity : AppCompatActivity(), ICommentAdapter {
     private lateinit var binding: ActivityCommentViewBinding
 
 
-    private val db = FirebaseFirestore.getInstance()
-
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment_view)
@@ -36,6 +36,8 @@ class CommentViewActivity : AppCompatActivity(), ICommentAdapter {
         binding = ActivityCommentViewBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        
 
         val pId = intent.getStringExtra("postId")!!.trim()
 
@@ -51,12 +53,21 @@ class CommentViewActivity : AppCompatActivity(), ICommentAdapter {
 
 
         postCollection.get().addOnSuccessListener(OnSuccessListener {
+
                       postText.text = it.getString("text")
                       createdAt.text = it.getLong("createdAt")?.let { it1 -> Utils.getTimeAgo(it1) }
                       userName.text = it.getString("creatorName")
                       Glide.with(userImage.context).load(it.getString("creatorImage")).circleCrop().into(userImage)
-
-
+                      val likearray: ArrayList<String> = it.get("likedBy") as ArrayList<String>
+                      if(likearray.size < 2)
+                          likecount.text = likearray.size.toString()+" Like"
+                      else
+                         likecount.text = likearray.size.toString()+" Likes"
+                      val commentarray: ArrayList<String> = it.get("commentedBy") as ArrayList<String>
+                      if(commentarray.size < 2)
+                         commentCount.text = commentarray.size.toString()+" Comment"
+                      else
+                          commentCount.text = commentarray.size.toString()+" Comments"
         })
                 .addOnFailureListener(OnFailureListener {
 
